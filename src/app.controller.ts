@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from './prisma/prisma.service';
 
 @Controller()
-export class HealthController {
+export class DebugController {
   constructor(private readonly prisma: PrismaService) {}
 
   @Get('/debug/connection-check')
