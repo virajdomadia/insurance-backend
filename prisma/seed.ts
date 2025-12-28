@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -7,7 +7,10 @@ async function main() {
   const adminEmail = 'admin@example.com';
   const adminPassword = 'Admin@12345';
 
-  const existing = await prisma.user.findUnique({ where: { email: adminEmail } as any } as any);
+  const existing = await prisma.user.findUnique({
+    where: { email: adminEmail },
+  });
+
   if (existing) {
     console.log(`Admin user with email ${adminEmail} already exists, skipping.`);
     return;
@@ -19,13 +22,20 @@ async function main() {
     data: {
       email: adminEmail,
       passwordHash,
-      role: 'ADMIN',
+      role: UserRole.ADMIN,
       isActive: true,
-    } as any,
-  } as any);
+    },
+  });
 
-  console.log('Created admin user:', { id: user.id, email: user.email });
-  console.log('IMPORTANT: change the password immediately or delete this seeded user in production');
+  console.log('Created admin user:', {
+    id: user.id,
+    email: user.email,
+    role: user.role,
+  });
+
+  console.log(
+    'IMPORTANT: change the password immediately or delete this seeded user in production',
+  );
 }
 
 main()
